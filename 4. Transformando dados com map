@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Carrinho de Compras</title>
+</head>
+<body>
+
+  <h2>Carrinho de Compras</h2>
+
+  <button onclick="aplicarDesconto()">Aplicar 10% de desconto</button>
+
+  <ul id="lista"></ul>
+
+  <script>
+    const produtos = [
+      { nome: "Mouse", preco: 50 },
+      { nome: "Teclado", preco: 100 },
+      { nome: "Monitor", preco: 800 }
+    ];
+
+    function aplicarDesconto() {
+      const comDesconto = produtos.map(produto => {
+        return {
+          nome: produto.nome,
+          preco: (produto.preco * 0.9).toFixed(2)
+        };
+      });
+
+      renderizar(comDesconto);
+    }
+
+    function renderizar(listaProdutos) {
+      const lista = document.getElementById("lista");
+      lista.innerHTML = "";
+
+      listaProdutos.forEach(produto => {
+        const li = document.createElement("li");
+        li.textContent = `${produto.nome} - R$ ${produto.preco}`;
+        lista.appendChild(li);
+      });
+    }
+
+   
+    renderizar(produtos);
+  </script>
+
+</body>
+</html>
