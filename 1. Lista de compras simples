@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Lista de Compras</title>
+  <style>
+    body {
+      font-family: Arial;
+    }
+    li {
+      margin: 5px 0;
+    }
+    button {
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Lista de Compras</h2>
+
+  <input type="text" id="itemInput" placeholder="Digite um item">
+  <button onclick="adicionarItem()">Adicionar</button>
+
+  <ul id="lista"></ul>
+
+  <script>
+    let itens = [];
+
+    function adicionarItem() {
+      const input = document.getElementById("itemInput");
+      const valor = input.value.trim();
+
+      if (valor !== "") {
+        itens.push(valor);
+        input.value = "";
+        renderizarLista();
+      }
+    }
+
+    function removerItem(index) {
+      itens.splice(index, 1);
+      renderizarLista();
+    }
+
+    function renderizarLista() {
+      const lista = document.getElementById("lista");
+      lista.innerHTML = "";
+
+      itens.forEach((item, index) => {
+        const li = document.createElement("li");
+
+        li.textContent = item;
+
+        const botao = document.createElement("button");
+        botao.textContent = "Remover";
+        botao.onclick = () => removerItem(index);
+
+        li.appendChild(botao);
+        lista.appendChild(li);
+      });
+    }
+  </script>
+
+</body>
+</html>
