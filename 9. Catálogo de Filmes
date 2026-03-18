@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Filmes</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 900px; margin: 50px auto; padding: 20px; }
+        .form { background: #343a40; color: white; padding: 25px; border-radius: 15px; margin-bottom: 30px; }
+        input, select { padding: 12px; margin: 8px; border: none; border-radius: 5px; width: 200px; }
+        button { padding: 12px 25px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; margin: 5px; font-weight: bold; }
+        button:hover { background: #0056b3; }
+        .filtro { background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px; }
+        .filme { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; margin: 15px 0; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .filme h3 { margin: 0 0 10px 0; }
+        .info { font-size: 14px; opacity: 0.9; }
+        select#filtroGenero { width: 150px; }
+    </style>
+</head>
+<body>
+    <h1>🎬 Catálogo de Filmes</h1>
+    
+    <div class="form">
+        <input type="text" id="tituloFilme" placeholder="Título do filme">
+        <input type="number" id="anoFilme" placeholder="Ano" min="1900" max="2025">
+        <select id="generoFilme">
+            <option value="">Selecione gênero</option>
+            <option value="Ação">Ação</option>
+            <option value="Drama">Drama</option>
+            <option value="Comédia">Comédia</option>
+            <option value="Terror">Terror</option>
+            <option value="Romance">Romance</option>
+            <option value="Ficção Científica">Ficção Científica</option>
+        </select>
+        <button onclick="adicionarFilme()">➕ Adicionar Filme</button>
+    </div>
+
+    <div class="filtro">
+        <label>Filtrar por gênero: </label>
+        <select id="filtroGenero" onchange="filtrarFilmes()">
+            <option value="">Todos os gêneros</option>
+            <option value="Ação">Ação</option>
+            <option value="Drama">Drama</option>
+            <option value="Comédia">Comédia</option>
+            <option value="Terror">Terror</option>
+            <option value="Romance">Romance</option>
+            <option value="Ficção Científica">Ficção Científica</option>
+        </select>
+        <button onclick="mostrarTodos()">Mostrar Todos</button>
+    </div>
+
+    <div id="listaFilmes"></div>
+
+    <script>
+        let filmes = [];
+
+        function adicionarFilme() {
+            const titulo = document.getElementById('tituloFilme').value.trim();
+            const ano = document.getElementById('anoFilme').value;
+            const genero = document.getElementById('generoFilme').value;
+            
+            if (titulo && ano && genero) {
+                filmes.push({ titulo, genero, ano: parseInt(ano) });
+                limparFormulario();
+                renderizarFilmes(filmes);
+            }
+        }
+
+        function limparFormulario() {
+            document.getElementById('tituloFilme').value = '';
+            document.getElementById('anoFilme').value = '';
+            document.getElementById('generoFilme').value = '';
+        }
+
+        function renderizarFilmes(filmesFiltrados) {
+            const lista = document.getElementById('listaFilmes');
+            lista.innerHTML = `<h2>Total: ${filmesFiltrados.length} filme(s)</h2>`;
+            
+            filmesFiltrados.forEach(filme => {
+                const div = document.createElement('div');
+                div.className = 'filme';
+                div.innerHTML = `
+                    <h3>🎥 ${filme.titulo}</h3>
+                    <div class="info">
+                        <strong>Gênero:</strong> ${filme.genero} | 
+                        <strong>Ano:</strong> ${filme.ano}
+                    </div>
+                `;
+                lista.appendChild(div);
+            });
+        }
+
+        function filtrarFilmes() {
+            const generoFiltro = document.getElementById('filtroGenero').value;
+            let filmesFiltrados = filmes;
+            
+            if (generoFiltro) {
+                filmesFiltrados = filmes.filter(filme => filme.genero === generoFiltro);
+            }
+            
+            renderizarFilmes(filmesFiltrados);
+        }
+
+        function mostrarTodos() {
+            document.getElementById('filtroGenero').value = '';
+            renderizarFilmes(filmes);
+        }
+
+        // Enter para adicionar
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') adicionarFilme();
+        });
+    </script>
+</body>
+</html>
