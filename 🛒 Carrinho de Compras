@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrinho de Compras</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
+        button { padding: 12px 24px; margin: 5px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .adicionar { background: #28a745; color: white; }
+        .remover { background: #dc3545; color: white; }
+        button:hover { opacity: 0.9; }
+        .produto { background: #e9ecef; padding: 15px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #007bff; }
+        #total { background: #007bff; color: white; padding: 15px; border-radius: 5px; margin-top: 20px; font-size: 18px; }
+    </style>
+</head>
+<body>
+    <h1>🛒 Carrinho de Compras</h1>
+    
+    <input type="text" id="produtoInput" placeholder="Nome do produto">
+    <input type="number" id="precoInput" placeholder="Preço" min="0" step="0.01">
+    <br>
+    <button class="adicionar" onclick="adicionarProduto()">➕ Adicionar Produto</button>
+    <button class="remover" onclick="removerUltimo()">🗑️ Remover Último</button>
+
+    <div id="carrinho"></div>
+    <div id="total"></div>
+
+    <script>
+        let carrinho = [];
+
+        function adicionarProduto() {
+            const nome = document.getElementById('produtoInput').value.trim();
+            const preco = parseFloat(document.getElementById('precoInput').value);
+            
+            if (nome && !isNaN(preco) && preco > 0) {
+                carrinho.push({ nome, preco });
+                document.getElementById('produtoInput').value = '';
+                document.getElementById('precoInput').value = '';
+                atualizarCarrinho();
+            }
+        }
+
+        function removerUltimo() {
+            if (carrinho.length > 0) {
+                carrinho.pop();
+                atualizarCarrinho();
+            }
+        }
+
+        function atualizarCarrinho() {
+            const carrinhoDiv = document.getElementById('carrinho');
+            const totalDiv = document.getElementById('total');
+            
+            carrinhoDiv.innerHTML = '<h2>Itens no Carrinho:</h2>';
+            
+            carrinho.forEach((produto, index) => {
+                const div = document.createElement('div');
+                div.className = 'produto';
+                div.innerHTML = `
+                    ${index + 1}. ${produto.nome} - R$ ${produto.preco.toFixed(2)}
+                `;
+                carrinhoDiv.appendChild(div);
+            });
+
+            const total = carrinho.reduce((sum, produto) => sum + produto.preco, 0);
+            totalDiv.innerHTML = `Total: R$ ${total.toFixed(2)} (${carrinho.length} itens)`;
+        }
+    </script>
+</body>
+</html>
