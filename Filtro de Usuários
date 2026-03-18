@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filtro de Usuários</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 700px; margin: 50px auto; padding: 20px; }
+        .form { background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px; }
+        input { padding: 10px; margin: 5px; width: 200px; }
+        button { padding: 10px 20px; background: #28a745; color: white; border: none; cursor: pointer; border-radius: 5px; margin: 5px; }
+        button:hover { background: #218838; }
+        .maior { background: #d4edda; border: 1px solid #c3e6cb; }
+        .menor { background: #f8d7da; border: 1px solid #f5c6cb; }
+        .usuario { padding: 12px; margin: 8px 0; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Filtro de Usuários</h1>
+    
+    <div class="form">
+        <input type="text" id="nomeUsuario" placeholder="Nome">
+        <input type="number" id="idadeUsuario" placeholder="Idade" min="0">
+        <button onclick="adicionarUsuario()">Adicionar Usuário</button>
+        <button onclick="filtrarMaiores()">Maiores de 18</button>
+        <button onclick="mostrarTodos()">Mostrar Todos</button>
+    </div>
+
+    <div id="listaUsuarios"></div>
+
+    <script>
+        let usuarios = [
+            { nome: "Ana", idade: 25 },
+            { nome: "João", idade: 17 },
+            { nome: "Maria", idade: 30 },
+            { nome: "Pedro", idade: 16 },
+            { nome: "Lucas", idade: 22 }
+        ];
+
+        function adicionarUsuario() {
+            const nome = document.getElementById('nomeUsuario').value.trim();
+            const idade = parseInt(document.getElementById('idadeUsuario').value);
+            
+            if (nome && !isNaN(idade)) {
+                usuarios.push({ nome, idade });
+                document.getElementById('nomeUsuario').value = '';
+                document.getElementById('idadeUsuario').value = '';
+                mostrarTodos();
+            }
+        }
+
+        function mostrarTodos() {
+            renderizarUsuarios(usuarios);
+        }
+
+        function filtrarMaiores() {
+            const maiores = usuarios.filter(usuario => usuario.idade >= 18);
+            renderizarUsuarios(maiores, "Maiores de 18 anos:");
+        }
+
+        function renderizarUsuarios(usuariosFiltrados, titulo = "Todos os Usuários:") {
+            const lista = document.getElementById('listaUsuarios');
+            lista.innerHTML = `<h2>${titulo} (${usuariosFiltrados.length})</h2>`;
+            
+            usuariosFiltrados.forEach(usuario => {
+                const div = document.createElement('div');
+                div.className = `usuario ${usuario.idade >=
